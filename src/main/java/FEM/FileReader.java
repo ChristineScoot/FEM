@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class FileReader {
-    double H, L;
+    double H, L, c, ro;
     int nH, nL;
 
     public FileReader() throws FileNotFoundException {
@@ -13,7 +13,7 @@ public class FileReader {
     }
 
     public void readFromFile() throws FileNotFoundException {
-        double[] data = new double[4];
+        double[] data = new double[6];
         System.out.println("Wczytywanie danych z pliku .txt");
         File file = new File("data.txt");
         Scanner read = new Scanner(file);
@@ -25,8 +25,10 @@ public class FileReader {
         }
         H = data[0];
         L = data[1];
-        nH = (int)data[2];
-        nL = (int)data[3];
+        nH = (int) data[2];
+        nL = (int) data[3];
+        c = data[4];
+        ro = data[5];
     }
 
     public double getH() {
@@ -45,7 +47,15 @@ public class FileReader {
         return nL;
     }
 
-    public void printData(){
+    public double getC() {
+        return c;
+    }
+
+    public double getRo() {
+        return ro;
+    }
+
+    public void printData() {
         System.out.println("H=" + H);
         System.out.println("L=" + L);
         System.out.println("nH=" + nH);

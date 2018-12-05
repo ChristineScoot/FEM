@@ -17,7 +17,7 @@ public class Main {
 //        grid.showElements();
 
 //JAKOBIANY
-        int k = 25; //conductivity-przewodność
+        int k = 30; //conductivity-przewodność
 
         LocalElement localElement = new LocalElement();
         Element element = new Element(1, new Node(1, 0, 0, 20),
@@ -70,6 +70,26 @@ public class Main {
                     System.out.println("matrixH");
                 }
                 System.out.println(matrixH[i][j]);
+            }
+        }
+        System.out.println();
+        double[][] matrixC = new double[4][4];
+        double[][] NxN = new double[4][4];
+//        matrixC = calka z c ro {N}{N}^T
+        for (int point = 0; point < 4; point++) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    NxN[i][j] = localElement.getFunkcjeKsztaltu()[point][i] * localElement.getFunkcjeKsztaltu()[point][j];
+                    matrixC[i][j] += fileReader.getC() * fileReader.getRo() * jacoby.getDetJ()[i] * NxN[i][j];
+                }
+            }
+        }
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (j == 0) {
+                    System.out.println("matrixC[" + i + "][]");
+                }
+                System.out.println(matrixC[i][j]);
             }
         }
     }

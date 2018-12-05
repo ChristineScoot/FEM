@@ -31,6 +31,7 @@ public class LocalElement {
             dNdeta[3][i] = -dNdeta[0][i];
         }
     }
+
     private static double N(double ksi, double eta) {
         return 0.25 * (1 + eta) * (1 + ksi);
     }
@@ -42,7 +43,8 @@ public class LocalElement {
     public double[][] getdNdeta() {
         return dNdeta;
     }
-    public void printdNdeta(){
+
+    public void printdNdeta() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (j == 0) {
@@ -51,5 +53,14 @@ public class LocalElement {
                 System.out.println(dNdeta[i][j]);
             }
         }
+    }
+
+    public double[][] getFunkcjeKsztaltu() {
+        double[][] funkcje = new double[4][4];
+        funkcje[0] = N1;
+        funkcje[1] = N2;
+        funkcje[2] = N3;
+        funkcje[3] = N4;
+        return funkcje;
     }
 }
