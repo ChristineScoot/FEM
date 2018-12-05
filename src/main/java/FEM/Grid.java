@@ -5,12 +5,12 @@ public class Grid {
     private int numberOfElements;
     private int nH;
     private int nL;
-    private int H;
-    private int L;
+    private double H;
+    private double L;
     private Node[] nodes;
     private Element[] elements;
 
-    public Grid(int nH, int nL, int H, int L) {
+    public Grid(int nH, int nL, double H, double L) {
         this.H = H;
         this.L = L;
         this.nH = nH;

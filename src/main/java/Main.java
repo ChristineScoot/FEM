@@ -17,7 +17,7 @@ public class Main {
 //        grid.showElements();
 
 //JAKOBIANY
-        int k = 30; //conductivity-przewodność
+        int k = 25; //conductivity-przewodność
 
         LocalElement localElement = new LocalElement();
         Element element = new Element(1, new Node(1, 0, 0, 20),
@@ -28,7 +28,7 @@ public class Main {
 
 //TODO wyrzucic do innej klasy
         //wyznacznik/jakobian
-        double[][] tymczasowaNazwa = new double[4][4];
+        double[][] tymczasowaNazwa = new double[4][4]; //czy to jest x??? jakobian.pdf strona trzecia
         for (int i = 0; i < 4; i++) {
             tymczasowaNazwa[i][0] = jacoby.getMatrix()[i][3] / jacoby.getDetJ()[i];
             tymczasowaNazwa[i][1] = jacoby.getMatrix()[i][1] / jacoby.getDetJ()[i];

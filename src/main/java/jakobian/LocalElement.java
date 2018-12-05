@@ -11,6 +11,7 @@ public class LocalElement {
     double[][] dNdeta = new double[4][4];
 
     public LocalElement() {
+        //To jest stałe dla wszytskich elementów
         for (int i = 0; i < 4; i++) {
             N1[i] = N(-ksi[i], -eta[i]);
             N2[i] = N(ksi[i], -eta[i]);
