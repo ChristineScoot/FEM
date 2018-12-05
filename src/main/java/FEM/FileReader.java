@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import lombok.Getter;
+
+@Getter
 public class FileReader {
-    double H, L, c, ro;
+    double H, L, c, ro, alfa;
     int nH, nL;
 
     public FileReader() throws FileNotFoundException {
@@ -13,7 +16,7 @@ public class FileReader {
     }
 
     public void readFromFile() throws FileNotFoundException {
-        double[] data = new double[6];
+        double[] data = new double[7];
         System.out.println("Wczytywanie danych z pliku .txt");
         File file = new File("data.txt");
         Scanner read = new Scanner(file);
@@ -29,30 +32,7 @@ public class FileReader {
         nL = (int) data[3];
         c = data[4];
         ro = data[5];
-    }
-
-    public double getH() {
-        return H;
-    }
-
-    public double getL() {
-        return L;
-    }
-
-    public int getnH() {
-        return nH;
-    }
-
-    public int getnL() {
-        return nL;
-    }
-
-    public double getC() {
-        return c;
-    }
-
-    public double getRo() {
-        return ro;
+        alfa = data[6];//współczynnik konwekcyjnej wymiany ciepła
     }
 
     public void printData() {
@@ -60,6 +40,9 @@ public class FileReader {
         System.out.println("L=" + L);
         System.out.println("nH=" + nH);
         System.out.println("nL=" + nL);
+        System.out.println("c=" + c);
+        System.out.println("ro=" + ro);
+        System.out.println("alfa=" + alfa);
         System.out.println();
     }
 }

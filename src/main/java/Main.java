@@ -12,7 +12,7 @@ public class Main {
         FileReader fileReader = new FileReader();
         fileReader.printData();
 
-        Grid grid = new Grid(fileReader.getnH(), fileReader.getnL(), fileReader.getH(), fileReader.getL());
+        Grid grid = new Grid(fileReader.getNH(), fileReader.getNL(), fileReader.getH(), fileReader.getL());
 //        grid.showGrid();
 //        grid.showElements();
 
@@ -36,8 +36,7 @@ public class Main {
             tymczasowaNazwa[i][3] = jacoby.getMatrix()[i][0] / jacoby.getDetJ()[i];
         }
 
-        //dN/dx
-        double[][] dNdx = new double[4][4];
+        double[][] dNdx = new double[4][4]; //dN/dx
         double[][] dNdy = new double[4][4];
 //        double[][] dNdxT = new double[4][4]; //transponowane
 //        double[][] dNdyT = new double[4][4];

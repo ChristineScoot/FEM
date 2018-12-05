@@ -1,7 +1,9 @@
 package jakobian;
 
 import FEM.Element;
+import lombok.Getter;
 
+@Getter
 public class Jakobian {
     double[][] matrix = new double[4][4];
     double[] detJ = new double[4];
@@ -19,13 +21,5 @@ public class Jakobian {
         for (int i = 0; i < 4; i++) {
             detJ[i] = matrix[i][0] * matrix[i][3] - matrix[i][1] * matrix[i][2];
         }
-    }
-
-    public double[][] getMatrix() {
-        return matrix;
-    }
-
-    public double[] getDetJ() {
-        return detJ;
     }
 }
