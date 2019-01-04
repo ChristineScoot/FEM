@@ -1,17 +1,20 @@
 package jakobian;
 
 public class LocalElement {
-    double[] ksi = {-1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3), -1.0 / Math.sqrt(3)};
-    double[] eta = {-1.0 / Math.sqrt(3), -1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3)};
-    double[] N1 = new double[4];
-    double[] N2 = new double[4];
-    double[] N3 = new double[4];
-    double[] N4 = new double[4];
-    double[][] dNdksi = new double[4][4];
-    double[][] dNdeta = new double[4][4];
+    private double[] ksi = {-1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3), -1.0 / Math.sqrt(3)};
+    private double[] eta = {-1.0 / Math.sqrt(3), -1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3), 1.0 / Math.sqrt(3)};
+    private double[] ksiSurface = {-1 / Math.sqrt(3), 1 / Math.sqrt(3), 1, 1, 1 / Math.sqrt(3), -1 / Math.sqrt(3), -1, -1};
+    private double[] etaSurface = {-1, -1, -1 / Math.sqrt(3), 1 / Math.sqrt(3), 1, 1, 1 / Math.sqrt(3), -1 / Math.sqrt(3)};
+    private double[] N1 = new double[4];
+    private double[] N2 = new double[4];
+    private double[] N3 = new double[4];
+    private double[] N4 = new double[4];
+    private double[][] NSurface = new double[2][4];
+    private double[][] dNdksi = new double[4][4];
+    private double[][] dNdeta = new double[4][4];
 
     public LocalElement() {
-        //To jest stałe dla wszytskich elementów
+        //To jest stałe dla wszystkich elementów
         for (int i = 0; i < 4; i++) {
             N1[i] = N(-ksi[i], -eta[i]);
             N2[i] = N(ksi[i], -eta[i]);
@@ -29,6 +32,23 @@ public class LocalElement {
             dNdeta[1][i] = -0.25 * (1 + ksi[i]);
             dNdeta[2][i] = -dNdeta[1][i];
             dNdeta[3][i] = -dNdeta[0][i];
+        }
+//        for (int i = 0; i < 4; i++) {
+//            NSurface[0][i] = N(-ksiSurface[2*i], -etaSurface[2*i]);
+//            NSurface[1][i] = N(+ksiSurface[2*i], -etaSurface[2*i]);
+//            NSurface[2][i] = N(+ksiSurface[2*i], +etaSurface[2*i]);
+//            NSurface[3][i] = N(-ksiSurface[2*i], +etaSurface[2*i]);
+//        }
+        for (int i = 0; i < 4; i++) {
+            NSurface[0][0] = N(-ksiSurface[2 * i], -etaSurface[2 * i]);
+            NSurface[0][1] = N(ksiSurface[2 * i], -etaSurface[2 * i]);
+            NSurface[0][2] = N(ksiSurface[2 * i], etaSurface[2 * i]);
+            NSurface[0][3] = N(-ksiSurface[2 * i], etaSurface[2 * i]);
+
+            NSurface[1][0] = N(-ksiSurface[2 * i + 1], -etaSurface[2 * i + 1]);
+            NSurface[1][1] = N(ksiSurface[2 * i + 1], -etaSurface[2 * i + 1]);
+            NSurface[1][2] = N(ksiSurface[2 * i + 1], etaSurface[2 * i + 1]);
+            NSurface[1][3] = N(-ksiSurface[2 * i + 1], etaSurface[2 * i + 1]);
         }
     }
 
@@ -62,5 +82,19 @@ public class LocalElement {
         funkcje[2] = N3;
         funkcje[3] = N4;
         return funkcje;
+    }
+
+    public void showFK() {
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.printf("%f ", NSurface[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public double[][] getNSurface() {
+        return NSurface;
     }
 }
