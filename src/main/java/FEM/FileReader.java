@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class FileReader {
-    double H, L, specificHeat, ro, alfa, initialTemperature, simulationtime, simulationStepTime, ambientTemperature;
+    double H, L, specificHeat, ro, alpha, initialTemperature, simulationtime, simulationStepTime, ambientTemperature;
     int nH, nL, conductivity;
 
     public FileReader() throws FileNotFoundException {
@@ -17,7 +17,7 @@ public class FileReader {
 
     public void readFromFile() throws FileNotFoundException {
         double[] data = new double[12];
-//        System.out.println("Wczytywanie danych z pliku .txt");
+//        System.out.println("Loading data from .txt file");
         File file = new File("data.txt");
         Scanner read = new Scanner(file);
         int counter = 0;
@@ -34,7 +34,7 @@ public class FileReader {
         conductivity = (int) data[4];//k
         specificHeat = data[5];
         ro = data[6];
-        alfa = data[7];//współczynnik konwekcyjnej wymiany ciepła
+        alpha = data[7];//współczynnik konwekcyjnej wymiany ciepła
         initialTemperature = data[8];
         simulationtime = data[9];
         simulationStepTime=data[10];
@@ -48,7 +48,7 @@ public class FileReader {
         System.out.println("nL=" + nL);
 //        System.out.println("specificHeat=" + specificHeat);
 //        System.out.println("ro=" + ro);
-//        System.out.println("alfa=" + alfa);
+//        System.out.println("alpha=" + alpha);
         System.out.println();
     }
 }

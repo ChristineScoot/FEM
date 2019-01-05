@@ -1,6 +1,6 @@
 package FEM;
 
-import jakobian.Jakobian;
+import jakobian.Jacoby;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +8,9 @@ import lombok.Setter;
 @Setter
 public class Element {
     private int id;
-    //    private int nodeIds[];
     private Node nodes[] = new Node[4];
-    private double k, ro, c, alfa, ambientTemp, dTau;
-    private Jakobian jacoby;
+    private double k, ro, c, alpha, ambientTemp, dTau;
+    private Jacoby jacoby;
     private double[][] H1Volume, matrixC, H2Surface, matrixH;
     private double[] matrixP;
     private double[] sideLengths;
@@ -26,7 +25,7 @@ public class Element {
         sideLengths[0] = Math.sqrt(Math.pow(lowerRight.getX() - lowerLeft.getX(), 2) + Math.pow(lowerRight.getY() - lowerLeft.getY(), 2));
         sideLengths[1] = Math.sqrt(Math.pow(upperRight.getX() - lowerRight.getX(), 2) + Math.pow(upperRight.getY() - lowerRight.getY(), 2));
         sideLengths[2] = Math.sqrt(Math.pow(upperRight.getX() - upperLeft.getX(), 2) + Math.pow(upperRight.getY() - upperLeft.getY(), 2));
-        sideLengths[3] = Math.sqrt(Math.pow(upperLeft.getX() - lowerLeft.getX(), 2) + Math.pow(upperLeft.getX() - lowerLeft.getY(), 2));
+        sideLengths[3] = Math.sqrt(Math.pow(upperLeft.getX() - lowerLeft.getX(), 2) + Math.pow(upperLeft.getY() - lowerLeft.getY(), 2));
         edge = new Edge[4];
         int i = 0;
         int j = 1;
@@ -44,7 +43,7 @@ public class Element {
             boundry=false;
         }
         this.id = id;
-        jacoby = new Jakobian(nodes);
+        jacoby = new Jacoby(nodes);
     }
 
     public Node getLowerLeft() {

@@ -1,6 +1,6 @@
 package FEM;
 
-import jakobian.Jakobian;
+import jakobian.Jacoby;
 import jakobian.LocalElement;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class Simulation {
 
     void simulate() {
         for (int currentElement = 0; currentElement < grid.getNumberOfElements(); currentElement++) {
-            Jakobian jacoby = grid.getElements()[currentElement].getJacoby();
+            Jacoby jacoby = grid.getElements()[currentElement].getJacoby();
             LocalElement localElement = jacoby.getLocalElement();
 
             double[][] inverseJacoby = new double[4][4];
@@ -30,8 +30,8 @@ public class Simulation {
             double[][] dNdy = new double[4][4];
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    dNdx[i][j] = inverseJacoby[i][0] * localElement.getdNdksi()[i][j] + inverseJacoby[i][1] * localElement.getdNdeta()[i][j];
-                    dNdy[i][j] = inverseJacoby[i][2] * localElement.getdNdksi()[i][j] + inverseJacoby[i][3] * localElement.getdNdeta()[i][j];
+                    dNdx[i][j] = inverseJacoby[i][0] * localElement.getDNdksi()[i][j] + inverseJacoby[i][1] * localElement.getDNdeta()[i][j];
+                    dNdy[i][j] = inverseJacoby[i][2] * localElement.getDNdksi()[i][j] + inverseJacoby[i][3] * localElement.getDNdeta()[i][j];
                 }
             }
 
@@ -52,86 +52,68 @@ public class Simulation {
             }
             grid.getElements()[currentElement].setH1Volume(matrixH);
 
-
+//MatrixC
             double[][] matrixC = new double[4][4];
             double[][] NxN = new double[4][4];
-//        matrixC = calka z c ro {N}{N}^T
             for (int point = 0; point < 4; point++) {
                 for (int i = 0; i < 4; i++) {
                     for (int j = 0; j < 4; j++) {
-                        NxN[i][j] = localElement.getFunkcjeKsztaltu()[point][i] * localElement.getFunkcjeKsztaltu()[point][j];
+                        NxN[i][j] = localElement.getShapeFunctions()[point][i] * localElement.getShapeFunctions()[point][j];
                         matrixC[i][j] += grid.getSpecificHeat() * grid.getDensity() * grid.getElements()[0].getJacoby().getDetJ()[i] * NxN[i][j];
                     }
                 }
             }
             grid.getElements()[currentElement].setMatrixC(matrixC);
 
-
-//H po powierzchni
-            //FIXME      Tu chyba błąd------------------------------------
-            double[][] matrixHSurface = new double[4][4];
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    matrixHSurface[i][j] = 0;
-                }
-            }
+//MatrixH on the surface, MatrixP
             double[] detJ = {grid.getElements()[currentElement].getSideLengths()[0] / 2,
                     grid.getElements()[currentElement].getSideLengths()[1] / 2,
                     grid.getElements()[currentElement].getSideLengths()[2] / 2,
                     grid.getElements()[currentElement].getSideLengths()[3] / 2};
-            double[][] pc1, pc2, sum;
+            double[][] pc1, pc2;
+            double[] ppc1, ppc2;
             pc1 = new double[4][4];
             pc2 = new double[4][4];
-            sum = new double[4][4];
-            double[][] NSurface = localElement.getNSurface(); //[2][4]
-
-            //localElement.showFK();
-//            System.out.println("SUM:");
-            for (int edge = 0; edge < 4; edge++) {
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        pc1[i][j] = NSurface[0][i] * NSurface[0][j] * grid.getElements()[currentElement].getAlfa();
-                        pc2[i][j] = NSurface[1][i] * NSurface[1][j] * grid.getElements()[currentElement].getAlfa();
-                        sum[i][j] = (pc1[i][j] + pc2[i][j]) * detJ[edge];
-                        if (currentElement == 0)
-                            System.out.println(sum[i][j]);
-                    }
-                    System.out.println();
-                }
-                if (grid.getElements()[currentElement].getEdge()[edge].isBoundry()) {
-                    for (int i = 0; i < 4; i++) {
-                        for (int j = 0; j < 4; j++) {
-                            matrixHSurface[i][j] += sum[i][j];
-                        }
-                    }
-                }
-            }
-            grid.getElements()[currentElement].setH2Surface(matrixHSurface);
-
-//Macierz P
-            double[] matrixP = new double[4];
-            for (int i = 0; i < 4; i++) {
-                matrixP[i] = 0;
-            }
-            double[] ppc1, ppc2, psum;
             ppc1 = new double[4];
             ppc2 = new double[4];
-            psum = new double[4];
+            double[][] NSurface = new double[2][4];
 
+            double[][] matrixHSurface = new double[4][4];
+            double[] matrixP = new double[4];
             for (int edge = 0; edge < 4; edge++) {
-                for (int i = 0; i < 4; i++) {
-                    ppc1[i] = NSurface[0][i] * grid.getElements()[currentElement].getAlfa() * grid.getElements()[currentElement].getAmbientTemp();
-                    ppc2[i] = NSurface[1][i] * grid.getElements()[currentElement].getAlfa() * grid.getElements()[currentElement].getAmbientTemp();
-                    psum[i] = (ppc1[i] + ppc2[i]) * detJ[edge];
-                }
                 if (grid.getElements()[currentElement].getEdge()[edge].isBoundry()) {
+                    NSurface[0][0] = N(-localElement.getKsiSurface()[2 * edge], -localElement.getEtaSurface()[2 * edge]);
+                    NSurface[0][1] = N(localElement.getKsiSurface()[2 * edge], -localElement.getEtaSurface()[2 * edge]);
+                    NSurface[0][2] = N(localElement.getKsiSurface()[2 * edge], localElement.getEtaSurface()[2 * edge]);
+                    NSurface[0][3] = N(-localElement.getKsiSurface()[2 * edge], localElement.getEtaSurface()[2 * edge]);
+
+                    NSurface[1][0] = N(-localElement.getKsiSurface()[2 * edge + 1], -localElement.getEtaSurface()[2 * edge + 1]);
+                    NSurface[1][1] = N(localElement.getKsiSurface()[2 * edge + 1], -localElement.getEtaSurface()[2 * edge + 1]);
+                    NSurface[1][2] = N(localElement.getKsiSurface()[2 * edge + 1], localElement.getEtaSurface()[2 * edge + 1]);
+                    NSurface[1][3] = N(-localElement.getKsiSurface()[2 * edge + 1], localElement.getEtaSurface()[2 * edge + 1]);
+//Matrix H on the surface
+                    for (int j = 0; j < 4; j++) {
+                        for (int k = 0; k < 4; k++) {
+                            pc1[j][k] = NSurface[0][j] * NSurface[0][k] * grid.getElements()[currentElement].getAlpha();
+                            pc2[j][k] = NSurface[1][j] * NSurface[1][k] * grid.getElements()[currentElement].getAlpha();
+                            matrixHSurface[j][k] += (pc1[j][k] + pc2[j][k]) * detJ[edge];
+                        }
+                    }
+//Matrix P
                     for (int i = 0; i < 4; i++) {
-                        matrixP[i] += psum[i];
+                        ppc1[i] = NSurface[0][i] * grid.getElements()[currentElement].getAlpha() * grid.getElements()[currentElement].getAmbientTemp();
+                        ppc2[i] = NSurface[1][i] * grid.getElements()[currentElement].getAlpha() * grid.getElements()[currentElement].getAmbientTemp();
+                        matrixP[i] += (ppc1[i] + ppc2[i]) * detJ[edge];
                     }
                 }
             }
+            for (int i = 0; i < matrixP.length; i++) {
+                matrixP[i] = -matrixP[i];
+            }
+            grid.getElements()[currentElement].setH2Surface(matrixHSurface);
             grid.getElements()[currentElement].setMatrixP(matrixP);
         }
+
         System.out.println("Simulation time");
         double simulationTime = grid.getSimulationTime();
         double simulationStepTime = grid.getSimulationStepTime();
@@ -156,11 +138,6 @@ public class Simulation {
                 b[j] = grid.getMatrixPZDaszkiem()[j];
             }
             double[] x = GaussianElimination.lsolve(A, b);
-//            if (i == 1) {
-//                for (int j = 0; j < x.length; j++) {
-//                    System.out.println(j + ".: t=" + x[j]);
-//                }
-//            }
             for (int j = 0; j < x.length; j++) {
                 grid.getNodes()[j].setTemp(x[j]);
             }

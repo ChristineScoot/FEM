@@ -8,7 +8,7 @@ public class Main {
 //        grid.showElements();
 //        grid.showEdges();
         Simulation simulation = new Simulation(grid);
-        grid.showGlobalMatrixH(); //FIXME czy h2Surface jest ok  ?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!????????????????????
+//        grid.showGlobalMatrixH();
 //        grid.showGlobalMatrixC();
 //        grid.showGlobalMatrixP();
 //        grid.showMatrixHzDaszkiem();

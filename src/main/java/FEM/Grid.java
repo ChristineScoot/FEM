@@ -10,7 +10,7 @@ public class Grid {
     private int numberOfNodes, numberOfElements, nH, nL;
     private double H, L, initialTemp, simulationTime, simulationStepTime, ambientTemp, alfa, specificHeat, k, density;
     private double[][] globalMatrixH, globalMatrixC, matrixHZDaszkiem;
-    private double[] globalMatrixP, matrixPZDaszkiem;//P-wektor??
+    private double[] globalMatrixP, matrixPZDaszkiem;
 
     private Node[] nodes;
     private Element[] elements;
@@ -30,7 +30,7 @@ public class Grid {
         this.simulationTime = fileReader.getSimulationtime();
         this.simulationStepTime = fileReader.getSimulationStepTime();
         this.ambientTemp = fileReader.getAmbientTemperature();
-        this.alfa = fileReader.getAlfa();
+        this.alfa = fileReader.getAlpha();
         this.specificHeat = fileReader.getSpecificHeat();
         this.k = fileReader.getConductivity();
         this.density = fileReader.getRo();
@@ -53,7 +53,6 @@ public class Grid {
         int counter = 0;
         for (int i = 0; i < nL; i++) {
             for (int j = 0; j < nH; j++) {
-//                System.out.println("(" + nodes[(i * j) - 1].getX() + ", \t" + nodes[(i * j) - 1].getY() + ")");
                 System.out.println("(" + nodes[counter].getX() + ", \t" + nodes[counter].getY() + ")");
                 counter++;
             }
@@ -73,7 +72,7 @@ public class Grid {
 
     private void addNode(int id, double x, double y, double temp) {
         boolean boundry = false;
-        if (x == 0 || x == L || y == 0 || y == H) boundry = true;
+        if (x == 0 || x >= L || y == 0 || y >= H) boundry = true;
         Node newNode = new Node(id, x, y, temp, boundry);
         nodes[id - 1] = newNode;
     }
@@ -94,7 +93,7 @@ public class Grid {
                 elements[currentElement] = new Element(currentElement, nodes[lowerLeft - 1], nodes[lowerRight - 1], nodes[upperRight - 1], nodes[upperLeft - 1]);
                 elements[currentElement].setAmbientTemp(ambientTemp);
                 elements[currentElement].setK(k);
-                elements[currentElement].setAlfa(alfa);
+                elements[currentElement].setAlpha(alfa);
                 elements[currentElement].setRo(density);
                 elements[currentElement].setC(specificHeat);
                 elements[currentElement].setDTau(simulationStepTime);
@@ -109,7 +108,6 @@ public class Grid {
         int nodeId = 1;
         for (int i = 0; i < nL; i++) {
             for (int j = 0; j < nH; j++) {
-//                System.out.println("Id=" + nodeId + "\t(" + dx * i + ", " + dy * j + ")");
                 addNode(nodeId, dx * i, dy * j, initialTemp);
                 nodeId++;
             }
@@ -123,11 +121,8 @@ public class Grid {
                     int row = elements[i].getNodes()[j].getId() - 1;
                     int column = elements[i].getNodes()[l].getId() - 1;
                     globalMatrixH[row][column] += elements[i].getH1Volume()[j][l];
-//                    System.out.println(elements[i].getH2Surface()[j][l]);
                     globalMatrixH[row][column] += elements[i].getH2Surface()[j][l];
-//                    globalMatrixH[row][column] += elements[i].getMatrixH()[i][j];
                 }
-//                System.out.println();
             }
         }
     }
@@ -162,9 +157,9 @@ public class Grid {
         double[] temp = new double[numberOfNodes];
         for (int i = 0; i < numberOfNodes; i++) {
             for (int j = 0; j < numberOfNodes; j++) {
-                temp[i] += nodes[i].getTemp() * globalMatrixC[i][j] / simulationStepTime;
+                temp[i] += nodes[j].getTemp() * globalMatrixC[i][j] / simulationStepTime;
             }
-            matrixPZDaszkiem[i] = temp[i] - globalMatrixP[i];
+            matrixPZDaszkiem[i] = temp[i] + globalMatrixP[i];
         }
     }
 
@@ -179,7 +174,7 @@ public class Grid {
     }
 
     public void showGlobalMatrixH() {
-        System.out.println("Globalna macierz H:");
+        System.out.println("Global matrix H:");
         for (int i = 0; i < numberOfNodes; i++) {
             for (int j = 0; j < numberOfNodes; j++) {
                 System.out.printf("%f  ", globalMatrixH[i][j]);
@@ -189,7 +184,7 @@ public class Grid {
     }
 
     public void showGlobalMatrixC() {
-        System.out.println("Globalna macierz C:");
+        System.out.println("Global matrix C:");
         for (int i = 0; i < numberOfNodes; i++) {
             for (int j = 0; j < numberOfNodes; j++) {
                 System.out.printf("%f  ", globalMatrixC[i][j]);
@@ -199,21 +194,21 @@ public class Grid {
     }
 
     public void showGlobalMatrixP() {
-        System.out.println("Globalna macierz P: ");
+        System.out.println("Global matrix P: ");
         for (int i = 0; i < numberOfNodes; i++) {
             System.out.println(globalMatrixP[i]);
         }
     }
 
     public void showMatrixPzDaszkiem() {
-        System.out.println("Macierz P^: ");
+        System.out.println("Matrix P^: ");
         for (int i = 0; i < numberOfNodes; i++) {
             System.out.println(matrixPZDaszkiem[i]);
         }
     }
 
     public void showMatrixHzDaszkiem() {
-        System.out.println("Macierz H^:");
+        System.out.println("Matrix H^:");
         for (int i = 0; i < numberOfNodes; i++) {
             for (int j = 0; j < numberOfNodes; j++) {
                 System.out.printf("%f  ", matrixHZDaszkiem[i][j]);
