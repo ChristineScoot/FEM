@@ -37,8 +37,8 @@ public class FileReader {
         alpha = data[7];//współczynnik konwekcyjnej wymiany ciepła
         initialTemperature = data[8];
         simulationtime = data[9];
-        simulationStepTime=data[10];
-        ambientTemperature=data[11];//otoczenia
+        simulationStepTime = data[10];
+        ambientTemperature = data[11];//otoczenia
     }
 
     public void printData() {

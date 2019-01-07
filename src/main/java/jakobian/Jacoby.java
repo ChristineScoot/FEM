@@ -7,9 +7,9 @@ import lombok.Getter;
 public class Jacoby {
     double[][] matrix = new double[4][4];
     double[] detJ = new double[4];
-    LocalElement localElement=new LocalElement();
+    LocalElement localElement = new LocalElement();
 
-    public Jacoby(Node[] nodes){
+    public Jacoby(Node[] nodes) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 matrix[j][0] += localElement.getDNdksi()[i][j] * nodes[i].getX();

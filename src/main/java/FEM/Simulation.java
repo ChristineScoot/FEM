@@ -82,7 +82,7 @@ public class Simulation {
             double[] matrixP = new double[4];
             for (int edge = 0; edge < 4; edge++) {
                 if (grid.getElements()[currentElement].getEdge()[edge].isBoundry()) {
-                    NSurface=localElement.getNSurface(edge);
+                    NSurface = localElement.getNSurface(edge);
 //Matrix H on the surface
                     for (int j = 0; j < 4; j++) {
                         for (int k = 0; k < 4; k++) {

@@ -29,18 +29,18 @@ public class Element {
         edge = new Edge[4];
         int i = 0;
         int j = 1;
-        boolean boundry=false;
+        boolean boundry = false;
         while (true) {
             if (j > 3) {
-                j=0;
+                j = 0;
             }
-            if(nodes[i].isBoundry() && nodes[j].isBoundry()) boundry=true;
+            if (nodes[i].isBoundry() && nodes[j].isBoundry()) boundry = true;
 
             edge[i] = new Edge(new Node[]{nodes[i], nodes[j]}, boundry);
-            if(j==0) break;
+            if (j == 0) break;
             i++;
             j++;
-            boundry=false;
+            boundry = false;
         }
         this.id = id;
         jacoby = new Jacoby(nodes);
