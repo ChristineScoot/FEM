@@ -13,6 +13,7 @@ public class LocalElement {
     private double[] N2 = new double[4];
     private double[] N3 = new double[4];
     private double[] N4 = new double[4];
+    private double[][]NSurface=new double[2][4];
     private double[][] dNdksi = new double[4][4];
     private double[][] dNdeta = new double[4][4];
 
@@ -59,5 +60,17 @@ public class LocalElement {
         functions[2] = N3;
         functions[3] = N4;
         return functions;
+    }
+    public double[][] getNSurface(int edge){
+        NSurface[0][0] = N(-ksiSurface[2 * edge], -etaSurface[2 * edge]);
+        NSurface[0][1] = N(ksiSurface[2 * edge], -etaSurface[2 * edge]);
+        NSurface[0][2] = N(ksiSurface[2 * edge], etaSurface[2 * edge]);
+        NSurface[0][3] = N(-ksiSurface[2 * edge], etaSurface[2 * edge]);
+
+        NSurface[1][0] = N(-ksiSurface[2 * edge + 1], -etaSurface[2 * edge + 1]);
+        NSurface[1][1] = N(ksiSurface[2 * edge + 1], -etaSurface[2 * edge + 1]);
+        NSurface[1][2] = N(ksiSurface[2 * edge + 1], etaSurface[2 * edge + 1]);
+        NSurface[1][3] = N(-ksiSurface[2 * edge + 1], etaSurface[2 * edge + 1]);
+        return NSurface;
     }
 }

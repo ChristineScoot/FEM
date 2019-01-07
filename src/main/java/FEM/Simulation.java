@@ -76,21 +76,13 @@ public class Simulation {
             pc2 = new double[4][4];
             ppc1 = new double[4];
             ppc2 = new double[4];
-            double[][] NSurface = new double[2][4];
+            double[][] NSurface; //[2][4]
 
             double[][] matrixHSurface = new double[4][4];
             double[] matrixP = new double[4];
             for (int edge = 0; edge < 4; edge++) {
                 if (grid.getElements()[currentElement].getEdge()[edge].isBoundry()) {
-                    NSurface[0][0] = N(-localElement.getKsiSurface()[2 * edge], -localElement.getEtaSurface()[2 * edge]);
-                    NSurface[0][1] = N(localElement.getKsiSurface()[2 * edge], -localElement.getEtaSurface()[2 * edge]);
-                    NSurface[0][2] = N(localElement.getKsiSurface()[2 * edge], localElement.getEtaSurface()[2 * edge]);
-                    NSurface[0][3] = N(-localElement.getKsiSurface()[2 * edge], localElement.getEtaSurface()[2 * edge]);
-
-                    NSurface[1][0] = N(-localElement.getKsiSurface()[2 * edge + 1], -localElement.getEtaSurface()[2 * edge + 1]);
-                    NSurface[1][1] = N(localElement.getKsiSurface()[2 * edge + 1], -localElement.getEtaSurface()[2 * edge + 1]);
-                    NSurface[1][2] = N(localElement.getKsiSurface()[2 * edge + 1], localElement.getEtaSurface()[2 * edge + 1]);
-                    NSurface[1][3] = N(-localElement.getKsiSurface()[2 * edge + 1], localElement.getEtaSurface()[2 * edge + 1]);
+                    NSurface=localElement.getNSurface(edge);
 //Matrix H on the surface
                     for (int j = 0; j < 4; j++) {
                         for (int k = 0; k < 4; k++) {
