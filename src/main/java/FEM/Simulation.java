@@ -118,7 +118,7 @@ public class Simulation {
             grid.calculateGlobalMatrixC();
             grid.calculateGlobalMatrixP();
             grid.calculateMatrixHzDaszkiem();
-            grid.calculateMatrixPxDaszkiem();
+            grid.calculateMatrixPzDaszkiem();
 
             double[][] A = new double[grid.getNumberOfNodes()][grid.getNumberOfNodes()];
             double[] b = new double[grid.getNumberOfNodes()];

@@ -153,7 +153,7 @@ public class Grid {
         }
     }
 
-    public void calculateMatrixPxDaszkiem() {
+    public void calculateMatrixPzDaszkiem() {
         double[] temp = new double[numberOfNodes];
         for (int i = 0; i < numberOfNodes; i++) {
             for (int j = 0; j < numberOfNodes; j++) {
